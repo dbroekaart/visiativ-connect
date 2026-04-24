@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Visiativ Connect — Design Mockup</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f172a; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 32px 16px 48px; }
+
+  h1 { color: white; font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .subtitle { color: #94a3b8; font-size: 13px; margin-bottom: 24px; }
+
+  /* Screen nav */
+  .screen-nav { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: 28px; max-width: 560px; }
+  .nav-btn { padding: 7px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1.5px solid transparent; transition: all 0.2s; white-space: nowrap; }
+  .nav-btn.active { background: #2563eb; color: white; border-color: #2563eb; }
+  .nav-btn:not(.active) { background: #1e293b; color: #94a3b8; border-color: #334155; }
+  .nav-btn:hover:not(.active) { border-color: #2563eb; color: #93c5fd; }
+
+  /* Phone frame */
+  .phone-wrapper { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; justify-content: center; }
+  .phone { width: 375px; background: #1a1a2e; border-radius: 48px; padding: 14px; box-shadow: 0 0 0 1px #334155, 0 40px 80px rgba(0,0,0,0.6), 0 0 60px rgba(37,99,235,0.15); flex-shrink: 0; }
+  .phone-notch { width: 120px; height: 28px; background: #0f172a; border-radius: 0 0 20px 20px; margin: 0 auto 8px; }
+  .phone-screen { background: #f8fafc; border-radius: 34px; overflow: hidden; min-height: 720px; position: relative; }
+
+  /* Screen visibility */
+  .screen { display: none; flex-direction: column; min-height: 720px; }
+  .screen.active { display: flex; }
+
+  /* ── COMMON COMPONENTS ── */
+  .top-bar { background: white; padding: 14px 16px 12px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 10; }
+  .top-bar h2 { font-size: 17px; font-weight: 700; color: #0f172a; flex: 1; }
+  .back-btn { color: #2563eb; font-size: 13px; font-weight: 600; cursor: pointer; }
+
+  .bottom-nav { background: white; border-top: 1px solid #e2e8f0; display: flex; padding: 0; position: sticky; bottom: 0; }
+  .bn-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 4px 10px; gap: 3px; cursor: pointer; }
+  .bn-icon { font-size: 20px; line-height: 1; }
+  .bn-label { font-size: 10px; font-weight: 600; color: #94a3b8; }
+  .bn-item.active .bn-label { color: #2563eb; }
+  .bn-item.active .bn-icon { filter: none; }
+
+  .page-content { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #f1f5f9; }
+
+  /* Cards */
+  .card { background: white; border-radius: 20px; padding: 16px; border: 1px solid #e2e8f0; }
+  .card-sm { background: white; border-radius: 16px; padding: 12px 14px; border: 1px solid #e2e8f0; }
+
+  /* Avatar */
+  .avatar { border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white; flex-shrink: 0; }
+  .av-sm  { width: 34px; height: 34px; font-size: 12px; }
+  .av-md  { width: 42px; height: 42px; font-size: 14px; }
+  .av-lg  { width: 56px; height: 56px; font-size: 20px; }
+  .av-xl  { width: 76px; height: 76px; font-size: 26px; }
+
+  /* Pill badge */
+  .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .badge-blue   { background: #dbeafe; color: #1d4ed8; }
+  .badge-green  { background: #dcfce7; color: #166534; }
+  .badge-yellow { background: #fef9c3; color: #854d0e; }
+  .badge-purple { background: #ede9fe; color: #6d28d9; }
+  .badge-pink   { background: #fce7f3; color: #9d174d; }
+  .badge-orange { background: #ffedd5; color: #9a3412; }
+
+  /* ── SCREEN 1: LOGIN ── */
+  #s-login { background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 50%, #2563eb 100%); }
+  .login-logo { width: 64px; height: 64px; background: white; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); margin: 0 auto 16px; }
+  .login-card { background: white; border-radius: 28px; padding: 24px; margin: 0 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+  .login-input { width: 100%; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 13px 16px; font-size: 14px; color: #0f172a; outline: none; }
+  .btn-primary { width: 100%; background: #2563eb; color: white; border: none; border-radius: 14px; padding: 14px; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .btn-outline { width: 100%; background: transparent; color: #64748b; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 12px; font-size: 13px; font-weight: 600; cursor: pointer; }
+
+  /* ── SCREEN 2: HOME ── */
+  .hero-card { background: linear-gradient(135deg, #1e40af, #2563eb); border-radius: 24px; padding: 20px; color: white; }
+  .hero-card h3 { font-size: 24px; font-weight: 800; margin-bottom: 2px; }
+  .ticket-bar { background: #fefce8; border: 1.5px solid #fde68a; border-radius: 16px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; }
+  .ticket-icon { width: 40px; height: 40px; background: #fbbf24; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .am-card { border-radius: 20px; padding: 16px; border: 1.5px solid #e2e8f0; background: white; }
+  .quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .quick-btn { background: white; border: 1.5px solid #e2e8f0; border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .quick-icon { width: 36px; height: 36px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 17px; }
+
+  /* ── SCREEN 3: AGENDA ── */
+  .session-card { background: white; border: 1.5px solid #e2e8f0; border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 6px; }
+  .session-time { font-size: 11px; font-weight: 700; color: #2563eb; display: flex; align-items: center; gap: 4px; }
+  .session-title { font-size: 14px; font-weight: 700; color: #0f172a; line-height: 1.3; }
+  .session-speaker { font-size: 12px; color: #64748b; }
+  .session-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+  /* ── SCREEN 4: SESSION DETAIL ── */
+  .session-hero { background: linear-gradient(135deg, #1e40af, #2563eb); padding: 20px; color: white; }
+
+  /* ── SCREEN 5: ATTENDEES ── */
+  .search-bar { background: white; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 11px 14px 11px 38px; font-size: 13px; color: #64748b; position: relative; }
+  .search-wrap { position: relative; }
+  .search-wrap::before { content: '🔍'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; }
+  .person-row { display: flex; align-items: center; gap: 12px; background: white; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 12px; }
+
+  /* ── SCREEN 6: PROFILE ── */
+  .profile-hero { background: linear-gradient(135deg, #1e40af, #2563eb); padding: 28px 20px 20px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; }
+
+  /* ── SCREEN 7: NETWORKING ── */
+  .match-card { background: white; border: 1.5px solid #e2e8f0; border-radius: 18px; padding: 12px; display: flex; align-items: center; gap: 10px; }
+
+  /* ── SCREEN 8: CHAT ── */
+  .chat-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: white; border-bottom: 1px solid #f1f5f9; }
+  .msg-bubble { max-width: 220px; padding: 10px 14px; border-radius: 18px; font-size: 13px; line-height: 1.4; }
+  .msg-out { background: #2563eb; color: white; border-bottom-right-radius: 4px; align-self: flex-end; }
+  .msg-in  { background: white; color: #0f172a; border: 1px solid #e2e8f0; border-bottom-left-radius: 4px; align-self: flex-start; }
+
+  /* ── SCREEN 9: PRIZES ── */
+  .prize-hero { background: linear-gradient(135deg, #f59e0b, #ef4444); padding: 28px 20px; text-align: center; color: white; }
+  .ticket-num { font-size: 64px; font-weight: 900; line-height: 1; }
+
+  /* ── SCREEN 10: INTERESTS ── */
+  .topic-row { background: white; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; }
+  .topic-row.selected { border-color: #2563eb; background: #eff6ff; }
+
+  /* ── SCREEN 11: ADMIN ── */
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat-card { background: white; border-radius: 16px; padding: 14px; border: 1px solid #e2e8f0; }
+
+  /* ── SCREEN 12: SURVEY ── */
+  .star-row { display: flex; gap: 8px; justify-content: center; font-size: 36px; }
+
+  /* Divider label */
+  .section-label { font-size: 10px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 0 2px; }
+
+  /* Info panel beside phone */
+  .info-panel { width: 240px; color: white; }
+  .info-panel h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: #e2e8f0; }
+  .info-feature { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px; }
+  .info-dot { width: 18px; height: 18px; background: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; margin-top: 1px; }
+  .info-text { font-size: 12px; color: #94a3b8; line-height: 1.4; }
+</style>
+</head>
+<body>
+
+<h1>✦ Visiativ Connect</h1>
+<p class="subtitle">Interactive design mockup — click the screens below to explore</p>
+
+<div class="screen-nav">
+  <button class="nav-btn active" onclick="showScreen('login')">Login</button>
+  <button class="nav-btn" onclick="showScreen('home')">Home</button>
+  <button class="nav-btn" onclick="showScreen('agenda')">Agenda</button>
+  <button class="nav-btn" onclick="showScreen('session')">Session</button>
+  <button class="nav-btn" onclick="showScreen('attendees')">Attendees</button>
+  <button class="nav-btn" onclick="showScreen('profile')">Profile</button>
+  <button class="nav-btn" onclick="showScreen('networking')">Networking</button>
+  <button class="nav-btn" onclick="showScreen('chat')">Chat</button>
+  <button class="nav-btn" onclick="showScreen('prizes')">Prize Draw</button>
+  <button class="nav-btn" onclick="showScreen('interests')">Interests</button>
+  <button class="nav-btn" onclick="showScreen('admin')">Admin</button>
+  <button class="nav-btn" onclick="showScreen('survey')">Survey</button>
+</div>
+
+<div class="phone-wrapper">
+  <!-- PHONE -->
+  <div class="phone">
+    <div class="phone-notch"></div>
+    <div class="phone-screen">
+
+      <!-- ══════ LOGIN ══════ -->
+      <div class="screen active" id="s-login">
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 32px 0; gap:20px;">
+          <div>
+            <div class="login-logo">⚡</div>
+            <div style="text-align:center; color:white;">
+              <div style="font-size:28px; font-weight:900; letter-spacing:-0.5px;">Visiativ Connect</div>
+              <div style="font-size:13px; color:#bfdbfe; margin-top:2px;">Your event networking companion</div>
+            </div>
+          </div>
+          <div class="login-card">
+            <div style="font-size:17px; font-weight:800; color:#0f172a; margin-bottom:4px;">Welcome!</div>
+            <div style="font-size:12px; color:#64748b; margin-bottom:16px; line-height:1.5;">Enter your registration email. We'll send a one-click login link — no password needed.</div>
+            <div style="margin-bottom:12px;">
+              <div style="font-size:12px; font-weight:600; color:#374151; margin-bottom:6px;">Email address</div>
+              <input class="login-input" value="john.smith@acmecorp.com" readonly />
+            </div>
+            <button class="btn-primary" style="margin-bottom:10px;">Send login link →</button>
+            <div style="text-align:center; font-size:11px; color:#94a3b8;">Only registered event attendees can access this app.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════ HOME ══════ -->
+      <div class="screen" id="s-home">
+        <div class="page-content" style="padding-top:12px; padding-bottom:0;">
+          <!-- Hero -->
+          <div class="hero-card">
+            <div style="font-size:12px; color:#bfdbfe; margin-bottom:2px;">Thursday, 12 June 2025</div>
+            <h3>Hi John 👋</h3>
+            <div style="font-size:13px; color:#bfdbfe;">Visiativ Customer Day · Lyon</div>
+            <div style="font-size:11px; color:#93c5fd; margin-top:4px;">📍 Centre de Congrès de Lyon</div>
+          </div>
+          <!-- Tickets -->
+          <div class="ticket-bar">
+            <div class="ticket-icon">🎟️</div>
+            <div style="flex:1;">
+              <div style="font-size:14px; font-weight:700; color:#92400e;">7 raffle tickets</div>
+              <div style="font-size:11px; color:#a16207;">Connect with more people to earn more!</div>
+            </div>
+            <div style="font-size:20px;">›</div>
+          </div>
+          <!-- AM Card -->
+          <div class="am-card">
+            <div style="font-size:10px; font-weight:800; color:#2563eb; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px;">Your Visiativ contact</div>
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+              <div class="avatar av-lg" style="background:#7c3aed;">MD</div>
+              <div>
+                <div style="font-weight:700; color:#0f172a; font-size:15px;">Marie Dupont</div>
+                <div style="font-size:12px; color:#64748b;">m.dupont@visiativ.com</div>
+                <div style="font-size:11px; color:#94a3b8; margin-top:2px;">Your account manager since 2022</div>
+              </div>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button style="flex:1; background:#eff6ff; color:#1d4ed8; border:none; border-radius:12px; padding:9px; font-size:12px; font-weight:700; cursor:pointer;">💬 Message</button>
+              <button style="flex:1; background:#f8fafc; color:#374151; border:1.5px solid #e2e8f0; border-radius:12px; padding:9px; font-size:12px; font-weight:600; cursor:pointer;">LinkedIn</button>
+            </div>
+          </div>
+          <!-- Quick grid -->
+          <div class="quick-grid">
+            <div class="quick-btn">
+              <div class="quick-icon" style="background:#dbeafe;">📅</div>
+              <div style="font-size:13px; font-weight:700; color:#0f172a;">View Agenda</div>
+            </div>
+            <div class="quick-btn">
+              <div class="quick-icon" style="background:#ede9fe;">👥</div>
+              <div style="font-size:13px; font-weight:700; color:#0f172a;">Meet Attendees</div>
+            </div>
+            <div class="quick-btn">
+              <div class="quick-icon" style="background:#fce7f3;">❤️</div>
+              <div style="font-size:13px; font-weight:700; color:#0f172a;">My Interests</div>
+            </div>
+            <div class="quick-btn" style="position:relative;">
+              <div style="position:absolute; top:10px; right:10px; background:#ef4444; color:white; border-radius:50%; width:18px; height:18px; font-size:10px; font-weight:800; display:flex; align-items:center; justify-content:center;">3</div>
+              <div class="quick-icon" style="background:#ffedd5;">⭐</div>
+              <div style="font-size:13px; font-weight:700; color:#0f172a;">Networking</div>
+            </div>
+          </div>
+          <!-- Up next -->
+          <div class="card-sm" style="background:white;">
+            <div style="font-size:10px; font-weight:800; color:#16a34a; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">Up next</div>
+            <div style="font-weight:700; color:#0f172a; font-size:14px;">AI & Automation in Manufacturing</div>
+            <div style="font-size:12px; color:#64748b; margin-top:3px;">14:00 – 14:45 · Hall B</div>
+          </div>
+          <div style="height:8px;"></div>
+        </div>
+        <div class="bottom-nav">
+          <div class="bn-item active" onclick="showScreen('home')"><div class="bn-icon">🏠</div><div class="bn-label" style="color:#2563eb;">Home</div></div>
+          <div class="bn-item" onclick="showScreen('agenda')"><div class="bn-icon">📅</div><div class="bn-label">Agenda</div></div>
+          <div class="bn-item" onclick="showScreen('attendees')"><div class="bn-icon">👥</div><div class="bn-label">People</div></div>
+          <div class="bn-item" onclick="showScreen('chat')"><div class="bn-icon">💬</div><div class="bn-label">Chat</div></div>
+          <div class="bn-item" onclick="showScreen('profile')"><div class="bn-icon">👤</div><div class="bn-label">Profile</div></div>
+        </div>
+      </div>
+
+      <!-- ══════ AGENDA ══════ -->
+      <div class="screen" id="s-agenda">
+        <div class="top-bar"><h2>Agenda</h2></div>
+        <div class="page-content">
+          <div class="section-label">Thursday, 12 June</div>
+          <div class="session-card">
+            <div class="session-time">⏰ 09:00 – 09:45</div>
+            <div class="session-title">Opening Keynote: The Future of Industrial Design</div>
+            <div class="session-speaker">Pierre Bernard, CEO Visiativ</div>
+            <div class="session-meta">
+              <span class="badge badge-blue">🌐 Digital Twin</span>
+              <span style="font-size:11px; color:#94a3b8;">📍 Main Stage</span>
+            </div>
+          </div>
+          <div class="session-card">
+            <div class="session-time">⏰ 10:00 – 10:45</div>
+            <div class="session-title">SolidWorks 2025: What's New & How to Use It</div>
+            <div class="session-speaker">Thomas Klein, Technical Expert</div>
+            <div class="session-meta">
+              <span class="badge badge-purple">🔧 SolidWorks</span>
+              <span style="font-size:11px; color:#94a3b8;">📍 Hall A</span>
+              <span style="font-size:11px; color:#16a34a;">⬇️ Slides</span>
+            </div>
+          </div>
+          <div class="session-card" style="border-color:#2563eb; background:#f8faff;">
+            <div style="font-size:10px; font-weight:800; color:#16a34a; margin-bottom:2px;">✓ CHECKED IN</div>
+            <div class="session-time">⏰ 11:00 – 11:45</div>
+            <div class="session-title">PDM & PLM: Managing Your Data at Scale</div>
+            <div class="session-speaker">Isabelle Moreau, Solutions Architect</div>
+            <div class="session-meta">
+              <span class="badge badge-blue">📁 PDM / PLM</span>
+              <span style="font-size:11px; color:#94a3b8;">📍 Hall B</span>
+            </div>
+          </div>
+          <div class="section-label" style="margin-top:4px;">Afternoon</div>
+          <div class="session-card">
+            <div class="session-time">⏰ 14:00 – 14:45</div>
+            <div class="session-title">AI & Automation in Manufacturing</div>
+            <div class="session-speaker">Dr. Anke Richter, Innovation Lab</div>
+            <div class="session-meta">
+              <span class="badge badge-orange">🤖 AI & Automation</span>
+              <span style="font-size:11px; color:#94a3b8;">📍 Hall B</span>
+              <span style="font-size:11px; color:#16a34a;">⬇️ Slides</span>
+            </div>
+          </div>
+          <div class="session-card">
+            <div class="session-time">⏰ 15:30 – 16:15</div>
+            <div class="session-title">3D Printing & Additive Manufacturing Showcase</div>
+            <div class="session-speaker">Marco Ferretti, AM Specialist</div>
+            <div class="session-meta">
+              <span class="badge badge-green">🖨️ 3D Printing</span>
+              <span style="font-size:11px; color:#94a3b8;">📍 Demo Area</span>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="bn-item" onclick="showScreen('home')"><div class="bn-icon">🏠</div><div class="bn-label">Home</div></div>
+          <div class="bn-item active"><div class="bn-icon">📅</div><div class="bn-label" style="color:#2563eb;">Agenda</div></div>
+          <div class="bn-item" onclick="showScreen('attendees')"><div class="bn-icon">👥</div><div class="bn-label">People</div></div>
+          <div class="bn-item" onclick="showScreen('chat')"><div class="bn-icon">💬</div><div class="bn-label">Chat</div></div>
+          <div class="bn-item" onclick="showScreen('profile')"><div class="bn-icon">👤</div><div class="bn-label">Profile</div></div>
+        </div>
+      </div>
+
+      <!-- ══════ SESSION DETAIL ══════ -->
+      <div class="screen" id="s-session">
+        <div class="session-hero">
+          <div style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.1em; background:rgba(255,255,255,0.2); color:white; padding:4px 10px; border-radius:20px; display:inline-block; margin-bottom:8px;">🔧 SolidWorks / CAD</div>
+          <div style="font-size:18px; font-weight:800; line-height:1.3; color:white; margin-bottom:8px;">SolidWorks 2025: What's New & How to Use It</div>
+          <div style="font-size:12px; color:#bfdbfe;">⏰ 10:00 – 10:45 &nbsp;·&nbsp; 📍 Hall A</div>
+        </div>
+        <div class="page-content" style="background:white;">
+          <!-- Check in -->
+          <button style="width:100%; background:#2563eb; color:white; border:none; border-radius:16px; padding:14px; font-size:14px; font-weight:800; cursor:pointer;">✓ Check in to this session (+1 ticket)</button>
+          <!-- Description -->
+          <div>
+            <div style="font-weight:700; font-size:15px; color:#0f172a; margin-bottom:8px;">About this session</div>
+            <div style="font-size:13px; color:#475569; line-height:1.6;">Discover the most exciting new features in SolidWorks 2025, from enhanced simulation tools to improved assembly performance. Live demos included. Bring your questions!</div>
+          </div>
+          <!-- Speaker -->
+          <div class="card">
+            <div style="font-weight:700; font-size:14px; color:#0f172a; margin-bottom:10px;">Speaker</div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div class="avatar av-lg" style="background:#0284c7;">TK</div>
+              <div>
+                <div style="font-weight:700; color:#0f172a; font-size:14px;">Thomas Klein</div>
+                <div style="font-size:12px; color:#64748b; margin-top:2px; line-height:1.4;">Senior Technical Expert at Visiativ. 12 years of SolidWorks implementation experience across Aerospace & Automotive.</div>
+              </div>
+            </div>
+          </div>
+          <!-- Download -->
+          <div style="display:flex; align-items:center; gap:12px; background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:18px; padding:14px;">
+            <div style="width:40px; height:40px; background:#16a34a; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0;">⬇️</div>
+            <div>
+              <div style="font-weight:700; color:#0f172a; font-size:14px;">Download session content</div>
+              <div style="font-size:11px; color:#64748b;">SW2025_Whats_New_Slides.pdf · 4.2 MB</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════ ATTENDEES ══════ -->
+      <div class="screen" id="s-attendees">
+        <div class="top-bar"><h2>Attendees</h2></div>
+        <div class="page-content">
+          <div class="search-wrap">
+            <input class="search-bar" style="width:100%;" value="Search name, company, role…" readonly />
+          </div>
+          <div style="display:flex; gap:6px;">
+            <span class="badge badge-blue" style="cursor:pointer; padding:6px 14px;">Everyone</span>
+            <span class="badge" style="background:#f1f5f9; color:#64748b; cursor:pointer; padding:6px 14px;">Visiativ Team</span>
+          </div>
+          <div style="font-size:11px; color:#94a3b8;">287 attendees</div>
+          <div class="person-row">
+            <div class="avatar av-md" style="background:#7c3aed;">AM</div>
+            <div style="flex:1; min-width:0;">
+              <div style="font-weight:700; font-size:14px; color:#0f172a;">Anna Müller</div>
+              <div style="font-size:12px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Design Engineer · Beta Manufacturing</div>
+            </div>
+            <span class="badge badge-green">Connected</span>
+          </div>
+          <div class="person-row">
+            <div class="avatar av-md" style="background:#0284c7;">LC</div>
+            <div style="flex:1; min-width:0;">
+              <div style="font-weight:700; font-size:14px; color:#0f172a;">Luca Conti</div>
+              <div style="font-size:12px; color:#64748b;">CAD Manager · Ferretti S.p.A.</div>
+            </div>
+          </div>
+          <div class="person-row">
+            <div class="avatar av-md" style="background:#16a34a;">SR</div>
+            <div style="flex:1; min-width:0;">
+              <div style="font-weight:700; font-size:14px; color:#0f172a; display:flex; gap:6px; align-items:center;">Sophie Renard <span class="badge badge-blue" style="padding:2px 7px; font-size:10px;">Visiativ</span></div>
+              <div style="font-size:12px; color:#64748b;">Technical Consultant · Visiativ</div>
+            </div>
+          </div>
+          <div class="person-row">
+            <div class="avatar av-md" style="background:#b45309;">JS</div>
+            <div style="flex:1; min-width:0;">
+              <div style="font-weight:700; font-size:14px; color:#0f172a;">Jan Schneider</div>
+              <div style="font-size:12px; color:#64748b;">Production Manager · Müller GmbH</div>
+            </div>
+          </div>
+          <div class="person-row">
+            <div class="avatar av-md" style="background:#be185d;">MV</div>
+            <div style="flex:1; min-width:0;">
+              <div style="font-weight:700; font-size:14px; color:#0f172a;">Marie Vidal</div>
+              <div style="font-size:12px; color:#64748b;">R&D Engineer · TechParts SA</div>
+            </div>
+          </div>
+          <div class="person-row">
+            <div class="avatar av-md" style="background:#0891b2;">KP</div>
+            <div style="flex:1; min-width:0;">
+              <div style="font-weight:700; font-size:14px; color:#0f172a;">Klaus Petersen</div>
+              <div style="font-size:12px; color:#64748b;">PLM Specialist · Nordic Ind.</div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="bn-item" onclick="showScreen('home')"><div class="bn-icon">🏠</div><div class="bn-label">Home</div></div>
+          <div class="bn-item" onclick="showScreen('agenda')"><div class="bn-icon">📅</div><div class="bn-label">Agenda</div></div>
+          <div class="bn-item active"><div class="bn-icon">👥</div><div class="bn-label" style="color:#2563eb;">People</div></div>
+          <div class="bn-item" onclick="showScreen('chat')"><div class="bn-icon">💬</div><div class="bn-label">Chat</div></div>
+          <div class="bn-item" onclick="showScreen('profile')"><div class="bn-icon">👤</div><div class="bn-label">Profile</div></div>
+        </div>
+      </div>
+
+      <!-- ══════ ATTENDEE PROFILE ══════ -->
+      <div class="screen" id="s-profile">
+        <div class="top-bar"><span class="back-btn" onclick="showScreen('attendees')">← Back</span></div>
+        <div style="flex:1; overflow-y:auto; background:#f1f5f9;">
+          <div class="profile-hero">
+            <div class="avatar av-xl" style="background:#7c3aed; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">AM</div>
+            <div style="color:white; font-size:20px; font-weight:800;">Anna Müller</div>
+            <div style="color:#bfdbfe; font-size:13px;">Design Engineer</div>
+            <div style="color:#93c5fd; font-size:12px;">Beta Manufacturing GmbH</div>
+            <span class="badge badge-green" style="margin-top:4px;">✓ Connected</span>
+          </div>
+          <div style="padding:16px; display:flex; flex-direction:column; gap:12px;">
+            <div class="card">
+              <div style="font-size:13px; color:#475569; line-height:1.6;">Mechanical engineer specialising in sheet metal design. Working with SolidWorks for 8 years. Interested in additive manufacturing and simulation.</div>
+              <div style="margin-top:8px;"><a style="font-size:12px; color:#0284c7;">🔗 LinkedIn profile</a></div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+              <button style="background:#2563eb; color:white; border:none; border-radius:14px; padding:12px; font-size:13px; font-weight:700; cursor:pointer;">👤 Connect</button>
+              <button style="background:white; color:#374151; border:1.5px solid #e2e8f0; border-radius:14px; padding:12px; font-size:13px; font-weight:600; cursor:pointer;" onclick="showScreen('chat')">💬 Message</button>
+              <button style="background:white; color:#374151; border:1.5px solid #e2e8f0; border-radius:14px; padding:12px; font-size:13px; font-weight:600; cursor:pointer; grid-column:span 2;">📅 Request meeting</button>
+            </div>
+            <div class="card">
+              <div style="font-weight:700; font-size:14px; color:#0f172a; margin-bottom:10px;">Interested in</div>
+              <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                <span class="badge badge-purple">🔧 SolidWorks</span>
+                <span class="badge badge-orange" style="border:1.5px solid #fb923c;">🖨️ 3D Printing 🙋</span>
+                <span class="badge badge-blue">📊 Simulation</span>
+                <span class="badge badge-green">🤖 AI & Automation</span>
+              </div>
+              <div style="font-size:10px; color:#94a3b8; margin-top:8px;">🙋 = wants more information from Visiativ</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════ NETWORKING ══════ -->
+      <div class="screen" id="s-networking">
+        <div class="top-bar"><h2>Networking</h2></div>
+        <div style="background:white; border-bottom:1px solid #e2e8f0; padding:10px 14px; display:flex; gap:6px; overflow-x:auto;">
+          <span class="badge badge-blue" style="cursor:pointer; padding:6px 12px; white-space:nowrap;">✨ Suggestions (8)</span>
+          <span class="badge" style="background:#f1f5f9; color:#64748b; cursor:pointer; padding:6px 12px; white-space:nowrap;">Requests (3)</span>
+          <span class="badge" style="background:#f1f5f9; color:#64748b; cursor:pointer; padding:6px 12px; white-space:nowrap;">Connected (11)</span>
+          <span class="badge" style="background:#f1f5f9; color:#64748b; cursor:pointer; padding:6px 12px; white-space:nowrap;">Meetings (2)</span>
+        </div>
+        <div class="page-content">
+          <div style="font-size:11px; color:#64748b; background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; padding:10px 12px; line-height:1.5;">
+            💡 These people share interests with you — great networking matches!
+          </div>
+          <div class="match-card">
+            <div class="avatar av-md" style="background:#7c3aed;">AM</div>
+            <div style="flex:1; min-width:0;">
+              <div style="font-weight:700; font-size:14px; color:#0f172a;">Anna Müller</div>
+              <div style="font-size:12px; color:#64748b;">Beta Manufacturing</div>
+            </div>
+            <span class="badge badge-purple" style="flex-shrink:0;">3 interests</span>
+          </div>
+          <div class="match-card">
+            <div class="avatar av-md" style="background:#0891b2;">KP</div>
+            <div style="flex:1; min-width:0;">
+              <div style="font-weight:700; font-size:14px; color:#0f172a;">Klaus Petersen</div>
+              <div style="font-size:12px; color:#64748b;">Nordic Industries</div>
+            </div>
+            <span class="badge badge-purple" style="flex-shrink:0;">2 interests</span>
+          </div>
+          <div class="match-card">
+            <div class="avatar av-md" style="background:#be185d;">MV</div>
+            <div style="flex:1; min-width:0;">
+              <div style="font-weight:700; font-size:14px; color:#0f172a;">Marie Vidal</div>
+              <div style="font-size:12px; color:#64748b;">TechParts SA</div>
+            </div>
+            <span class="badge badge-purple" style="flex-shrink:0;">2 interests</span>
+          </div>
+          <div style="background:#fef9c3; border:1.5px solid #fde68a; border-radius:16px; padding:14px;">
+            <div style="font-weight:700; font-size:13px; color:#92400e; margin-bottom:4px;">📅 Meeting request from Jan Schneider</div>
+            <div style="font-size:12px; color:#a16207; margin-bottom:10px;">"Would love to discuss your PLM setup" · Proposed: After lunch ~13:30</div>
+            <div style="display:flex; gap:8px;">
+              <button style="flex:1; background:#16a34a; color:white; border:none; border-radius:10px; padding:8px; font-size:12px; font-weight:700; cursor:pointer;">✓ Accept</button>
+              <button style="flex:1; background:white; color:#64748b; border:1.5px solid #e2e8f0; border-radius:10px; padding:8px; font-size:12px; font-weight:600; cursor:pointer;">Decline</button>
+            </div>
+          </div>
+          <div class="match-card">
+            <div class="avatar av-md" style="background:#b45309;">LC</div>
+            <div style="flex:1; min-width:0;">
+              <div style="font-weight:700; font-size:14px; color:#0f172a;">Luca Conti</div>
+              <div style="font-size:12px; color:#64748b;">Ferretti S.p.A.</div>
+            </div>
+            <span class="badge badge-purple" style="flex-shrink:0;">2 interests</span>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="bn-item" onclick="showScreen('home')"><div class="bn-icon">🏠</div><div class="bn-label">Home</div></div>
+          <div class="bn-item" onclick="showScreen('agenda')"><div class="bn-icon">📅</div><div class="bn-label">Agenda</div></div>
+          <div class="bn-item" onclick="showScreen('attendees')"><div class="bn-icon">👥</div><div class="bn-label">People</div></div>
+          <div class="bn-item" onclick="showScreen('chat')"><div class="bn-icon">💬</div><div class="bn-label">Chat</div></div>
+          <div class="bn-item" onclick="showScreen('profile')"><div class="bn-icon">👤</div><div class="bn-label">Profile</div></div>
+        </div>
+      </div>
+
+      <!-- ══════ CHAT ══════ -->
+      <div class="screen" id="s-chat">
+        <div class="top-bar"><h2>Messages</h2></div>
+        <div style="flex:1; overflow-y:auto; background:white;">
+          <div class="chat-row" style="background:#eff6ff;">
+            <div style="position:relative;">
+              <div class="avatar av-md" style="background:#7c3aed;">AM</div>
+              <div style="position:absolute; top:-2px; right:-2px; width:16px; height:16px; background:#2563eb; color:white; border-radius:50%; font-size:9px; font-weight:800; display:flex; align-items:center; justify-content:center;">2</div>
+            </div>
+            <div style="flex:1; min-width:0;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="font-weight:800; font-size:14px; color:#0f172a;">Anna Müller</div>
+                <div style="font-size:11px; color:#94a3b8;">14:32</div>
+              </div>
+              <div style="font-size:12px; color:#1d4ed8; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Are you going to the 3D printing demo?</div>
+            </div>
+          </div>
+          <div class="chat-row">
+            <div class="avatar av-md" style="background:#7c3aed;">MD</div>
+            <div style="flex:1; min-width:0;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="font-weight:700; font-size:14px; color:#0f172a;">Marie Dupont <span style="font-size:10px; background:#dbeafe; color:#1d4ed8; padding:2px 6px; border-radius:8px; font-weight:600;">Visiativ</span></div>
+                <div style="font-size:11px; color:#94a3b8;">11:15</div>
+              </div>
+              <div style="font-size:12px; color:#64748b; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">You: Thanks for the session, looking forwa…</div>
+            </div>
+          </div>
+          <div class="chat-row">
+            <div class="avatar av-md" style="background:#0891b2;">KP</div>
+            <div style="flex:1; min-width:0;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="font-weight:700; font-size:14px; color:#0f172a;">Klaus Petersen</div>
+                <div style="font-size:11px; color:#94a3b8;">09:48</div>
+              </div>
+              <div style="font-size:12px; color:#64748b; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">You: Let's grab coffee at the break!</div>
+            </div>
+          </div>
+          <!-- Chat conversation below -->
+          <div style="border-top:2px solid #f1f5f9; padding:16px; display:flex; flex-direction:column; gap:10px; background:#f8fafc;">
+            <div style="text-align:center; font-size:11px; color:#94a3b8; font-weight:600;">ANNA MÜLLER · 14:31</div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div class="msg-bubble msg-in">Hey John! Did you catch the PLM session this morning?</div>
+              <div class="msg-bubble msg-out" style="align-self:flex-end;">Yes! Super useful. The Data Management part was exactly what we needed.</div>
+              <div class="msg-bubble msg-in">Are you going to the 3D printing demo later?</div>
+            </div>
+            <div style="display:flex; gap:8px; padding-top:4px;">
+              <input style="flex:1; border:1.5px solid #e2e8f0; border-radius:24px; padding:10px 16px; font-size:13px; background:white;" value="Yes, see you there! 👍" readonly />
+              <div style="width:40px; height:40px; background:#2563eb; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer;">➤</div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="bn-item" onclick="showScreen('home')"><div class="bn-icon">🏠</div><div class="bn-label">Home</div></div>
+          <div class="bn-item" onclick="showScreen('agenda')"><div class="bn-icon">📅</div><div class="bn-label">Agenda</div></div>
+          <div class="bn-item" onclick="showScreen('attendees')"><div class="bn-icon">👥</div><div class="bn-label">People</div></div>
+          <div class="bn-item active"><div class="bn-icon">💬</div><div class="bn-label" style="color:#2563eb;">Chat</div></div>
+          <div class="bn-item" onclick="showScreen('profile_me')"><div class="bn-icon">👤</div><div class="bn-label">Profile</div></div>
+        </div>
+      </div>
+
+      <!-- ══════ PRIZES ══════ -->
+      <div class="screen" id="s-prizes">
+        <div class="top-bar"><h2>Prize Draw 🎟️</h2></div>
+        <div style="flex:1; overflow-y:auto;">
+          <div class="prize-hero">
+            <div style="font-size:14px; font-weight:700; color:rgba(255,255,255,0.8); margin-bottom:4px;">Your raffle tickets</div>
+            <div class="ticket-num">7</div>
+            <div style="color:rgba(255,255,255,0.8); font-size:13px; margin-top:4px;">You're ranked #4 on the leaderboard!</div>
+          </div>
+          <div style="padding:16px; display:flex; flex-direction:column; gap:12px;">
+            <div class="card">
+              <div style="font-weight:700; font-size:14px; margin-bottom:10px; display:flex; align-items:center; gap:6px;">⚡ How to earn more</div>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <div style="display:flex; justify-content:space-between; font-size:13px; text-decoration:line-through; color:#94a3b8;"><span>✓ Complete your profile</span><span style="color:#94a3b8;">+3</span></div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; text-decoration:line-through; color:#94a3b8;"><span>✓ Accept privacy policy</span><span style="color:#94a3b8;">+1</span></div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; text-decoration:line-through; color:#94a3b8;"><span>✓ First connection made</span><span style="color:#94a3b8;">+2</span></div>
+                <div style="height:1px; background:#f1f5f9; margin:2px 0;"></div>
+                <div style="font-size:11px; color:#94a3b8; margin-bottom:2px; font-weight:700;">Repeatable</div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; color:#374151;"><span>Connect with an attendee</span><span style="color:#ca8a04; font-weight:700;">+1</span></div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; color:#374151;"><span>Check in to a session</span><span style="color:#ca8a04; font-weight:700;">+1</span></div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; color:#374151;"><span>"Want more info" on a topic</span><span style="color:#ca8a04; font-weight:700;">+2</span></div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; color:#374151;"><span>Complete event survey</span><span style="color:#ca8a04; font-weight:700;">+3</span></div>
+              </div>
+            </div>
+            <div class="card">
+              <div style="font-weight:700; font-size:14px; margin-bottom:12px;">🏆 Leaderboard</div>
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <div style="display:flex; align-items:center; gap:10px; background:#fef9c3; border-radius:12px; padding:8px;">
+                  <span style="font-size:18px;">🥇</span>
+                  <div class="avatar av-sm" style="background:#7c3aed;">AM</div>
+                  <div style="flex:1; min-width:0;"><div style="font-size:13px; font-weight:700;">Anna Müller</div></div>
+                  <div style="display:flex; align-items:center; gap:4px; font-weight:800; font-size:13px;">🎟️ 14</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px; padding:8px;">
+                  <span style="font-size:18px;">🥈</span>
+                  <div class="avatar av-sm" style="background:#0891b2;">KP</div>
+                  <div style="flex:1; min-width:0;"><div style="font-size:13px; font-weight:600;">Klaus Petersen</div></div>
+                  <div style="display:flex; align-items:center; gap:4px; font-weight:700; font-size:13px; color:#64748b;">🎟️ 12</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px; padding:8px;">
+                  <span style="font-size:18px;">🥉</span>
+                  <div class="avatar av-sm" style="background:#be185d;">MV</div>
+                  <div style="flex:1; min-width:0;"><div style="font-size:13px; font-weight:600;">Marie Vidal</div></div>
+                  <div style="display:flex; align-items:center; gap:4px; font-weight:700; font-size:13px; color:#64748b;">🎟️ 10</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px; padding:8px; background:#eff6ff; border-radius:12px;">
+                  <span style="font-size:14px; color:#64748b; font-weight:800; width:24px; text-align:center;">4</span>
+                  <div class="avatar av-sm" style="background:#b45309;">JS</div>
+                  <div style="flex:1; min-width:0;"><div style="font-size:13px; font-weight:700; color:#1d4ed8;">You (John)</div></div>
+                  <div style="display:flex; align-items:center; gap:4px; font-weight:800; font-size:13px; color:#1d4ed8;">🎟️ 7</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════ INTERESTS ══════ -->
+      <div class="screen" id="s-interests">
+        <div class="top-bar"><h2>My Interests</h2></div>
+        <div class="page-content">
+          <div style="background:#eff6ff; border:1.5px solid #bfdbfe; border-radius:14px; padding:12px; font-size:12px; color:#1e40af; line-height:1.5;">
+            💡 Your interests help us suggest networking matches and let Visiativ follow up on topics you care about.
+          </div>
+          <div class="section-label">Engineering</div>
+          <div class="topic-row selected">
+            <div style="width:22px; height:22px; background:#2563eb; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">✓</div>
+            <span style="font-size:18px;">🔧</span>
+            <span style="flex:1; font-size:14px; font-weight:600; color:#1e40af;">SolidWorks / CAD</span>
+          </div>
+          <div style="margin-left:32px; background:#f0f9ff; border-radius:10px; padding:8px 12px; margin-top:-8px; border:1px solid #bae6fd;">
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+              <input type="checkbox" checked style="width:16px; height:16px; accent-color:#2563eb;" />
+              <span style="font-size:12px; color:#0369a1;">🙋 I'd like Visiativ to contact me about this <strong style="color:#2563eb;">(+2 tickets)</strong></span>
+            </label>
+          </div>
+          <div class="topic-row selected">
+            <div style="width:22px; height:22px; background:#2563eb; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">✓</div>
+            <span style="font-size:18px;">📊</span>
+            <span style="flex:1; font-size:14px; font-weight:600; color:#1e40af;">Simulation & Analysis</span>
+          </div>
+          <div class="topic-row">
+            <div style="width:22px; height:22px; border:2px solid #d1d5db; border-radius:50%; flex-shrink:0;"></div>
+            <span style="font-size:18px;">📁</span>
+            <span style="flex:1; font-size:14px; color:#374151;">PDM / PLM</span>
+          </div>
+          <div class="topic-row">
+            <div style="width:22px; height:22px; border:2px solid #d1d5db; border-radius:50%; flex-shrink:0;"></div>
+            <span style="font-size:18px;">⚡</span>
+            <span style="flex:1; font-size:14px; color:#374151;">Electrical Design</span>
+          </div>
+          <div class="section-label">Innovation</div>
+          <div class="topic-row selected">
+            <div style="width:22px; height:22px; background:#2563eb; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">✓</div>
+            <span style="font-size:18px;">🤖</span>
+            <span style="flex:1; font-size:14px; font-weight:600; color:#1e40af;">AI & Automation</span>
+          </div>
+          <div class="topic-row">
+            <div style="width:22px; height:22px; border:2px solid #d1d5db; border-radius:50%; flex-shrink:0;"></div>
+            <span style="font-size:18px;">🖨️</span>
+            <span style="flex:1; font-size:14px; color:#374151;">3D Printing / AM</span>
+          </div>
+          <button style="width:100%; background:#2563eb; color:white; border:none; border-radius:16px; padding:14px; font-size:14px; font-weight:800; cursor:pointer;">Save my interests</button>
+        </div>
+      </div>
+
+      <!-- ══════ ADMIN ══════ -->
+      <div class="screen" id="s-admin">
+        <div style="background:#1e3a8a; padding:14px 16px; display:flex; align-items:center; justify-content:space-between;">
+          <div style="font-size:17px; font-weight:800; color:white;">Admin Dashboard</div>
+          <span style="background:#1e40af; color:#93c5fd; font-size:11px; font-weight:700; padding:4px 10px; border-radius:12px;">Admin</span>
+        </div>
+        <div style="background:#1e3a8a; padding:0 8px 10px; display:flex; gap:4px; overflow-x:auto;">
+          <button style="background:#2563eb; color:white; border:none; border-radius:10px; padding:7px 12px; font-size:11px; font-weight:700; white-space:nowrap; cursor:pointer;">Dashboard</button>
+          <button style="background:transparent; color:#93c5fd; border:none; padding:7px 10px; font-size:11px; font-weight:600; white-space:nowrap; cursor:pointer;">Attendees</button>
+          <button style="background:transparent; color:#93c5fd; border:none; padding:7px 10px; font-size:11px; font-weight:600; white-space:nowrap; cursor:pointer;">Agenda</button>
+          <button style="background:transparent; color:#93c5fd; border:none; padding:7px 10px; font-size:11px; font-weight:600; white-space:nowrap; cursor:pointer;">Analytics</button>
+          <button style="background:transparent; color:#93c5fd; border:none; padding:7px 10px; font-size:11px; font-weight:600; white-space:nowrap; cursor:pointer;">Leads</button>
+        </div>
+        <div class="page-content" style="background:#f1f5f9;">
+          <!-- Adoption bar -->
+          <div class="card">
+            <div style="font-weight:700; font-size:14px; margin-bottom:8px;">App adoption</div>
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px;">
+              <div style="flex:1; background:#e2e8f0; border-radius:99px; height:12px;">
+                <div style="background:#2563eb; height:12px; border-radius:99px; width:78%;"></div>
+              </div>
+              <span style="font-size:14px; font-weight:800; color:#2563eb;">78%</span>
+            </div>
+            <div style="font-size:11px; color:#64748b;">234 of 300 attendees have completed their profile</div>
+          </div>
+          <!-- Stats grid -->
+          <div class="stat-grid">
+            <div class="stat-card">
+              <div style="font-size:22px; font-weight:800; color:#2563eb;">234</div>
+              <div style="font-size:11px; color:#64748b; margin-top:2px;">Profiles complete</div>
+            </div>
+            <div class="stat-card">
+              <div style="font-size:22px; font-weight:800; color:#7c3aed;">183</div>
+              <div style="font-size:11px; color:#64748b; margin-top:2px;">Connections made</div>
+            </div>
+            <div class="stat-card">
+              <div style="font-size:22px; font-weight:800; color:#0891b2;">1,247</div>
+              <div style="font-size:11px; color:#64748b; margin-top:2px;">Messages sent</div>
+            </div>
+            <div class="stat-card">
+              <div style="font-size:22px; font-weight:800; color:#ea580c;">412</div>
+              <div style="font-size:11px; color:#64748b; margin-top:2px;">Session check-ins</div>
+            </div>
+            <div class="stat-card">
+              <div style="font-size:22px; font-weight:800; color:#ca8a04;">3,891</div>
+              <div style="font-size:11px; color:#64748b; margin-top:2px;">Raffle tickets</div>
+            </div>
+            <div class="stat-card" style="border-color:#fecaca; background:#fff5f5;">
+              <div style="font-size:22px; font-weight:800; color:#dc2626;">67</div>
+              <div style="font-size:11px; color:#dc2626; font-weight:600; margin-top:2px;">🎯 Sales leads</div>
+            </div>
+          </div>
+          <!-- Export button -->
+          <button style="width:100%; background:#dc2626; color:white; border:none; border-radius:16px; padding:14px; font-size:14px; font-weight:800; cursor:pointer;">⬇️ Export 67 leads to CSV</button>
+          <button style="width:100%; background:#1e293b; color:white; border:none; border-radius:16px; padding:12px; font-size:13px; font-weight:700; cursor:pointer;">📊 View full analytics</button>
+        </div>
+      </div>
+
+      <!-- ══════ SURVEY ══════ -->
+      <div class="screen" id="s-survey">
+        <div class="top-bar"><h2>Event Survey</h2></div>
+        <div class="page-content" style="background:white;">
+          <div style="background:#fef9c3; border:1.5px solid #fde68a; border-radius:14px; padding:12px; text-align:center; font-size:13px; font-weight:700; color:#92400e;">
+            🎟️ Complete this survey to earn +3 raffle tickets!
+          </div>
+          <div class="card">
+            <div style="font-weight:700; font-size:15px; text-align:center; margin-bottom:12px;">Overall, how would you rate this event?</div>
+            <div class="star-row">⭐⭐⭐⭐☆</div>
+            <div style="text-align:center; font-size:13px; font-weight:700; color:#2563eb; margin-top:6px;">Very good!</div>
+          </div>
+          <div class="card">
+            <div style="font-weight:700; font-size:14px; margin-bottom:8px;">What did you enjoy most?</div>
+            <div style="background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:12px; padding:10px 12px; font-size:13px; color:#475569; line-height:1.5;">
+              The hands-on SolidWorks demos and being able to connect with other engineers facing similar challenges.
+            </div>
+          </div>
+          <div class="card">
+            <div style="font-weight:700; font-size:14px; margin-bottom:8px;">What could we improve?</div>
+            <div style="background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:12px; padding:10px 12px; font-size:13px; color:#475569; line-height:1.5;">
+              More time for the networking sessions — 45 minutes wasn't enough!
+            </div>
+          </div>
+          <div class="card" style="border-color:#bbf7d0; background:#f0fdf4;">
+            <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer;">
+              <input type="checkbox" checked style="width:18px; height:18px; margin-top:2px; accent-color:#16a34a;" />
+              <div>
+                <div style="font-weight:700; font-size:14px; color:#0f172a;">I'd like to be contacted for a follow-up</div>
+                <div style="font-size:12px; color:#64748b; margin-top:2px;">A Visiativ account manager will reach out.</div>
+                <div style="font-size:11px; color:#166534; margin-top:6px;">Topics: SolidWorks upgrade, 3D printing consultation</div>
+              </div>
+            </label>
+          </div>
+          <button style="width:100%; background:#2563eb; color:white; border:none; border-radius:16px; padding:14px; font-size:14px; font-weight:800; cursor:pointer;">Submit survey (+3 tickets) 🎟️</button>
+        </div>
+      </div>
+
+    </div><!-- end phone-screen -->
+  </div><!-- end phone -->
+
+  <!-- Info panel -->
+  <div class="info-panel" id="info-panel">
+    <div id="panel-content"></div>
+  </div>
+</div>
+
+<script>
+const panels = {
+  login:      { title: '🔐 Login screen', features: ['Magic link — no password needed','Only pre-registered attendees can log in','Works on any mobile browser','First login triggers profile setup'] },
+  home:       { title: '🏠 Home dashboard', features: ['Personalised greeting with event details','Account manager introduction card','Live raffle ticket balance','Quick-action shortcuts','"Up next" session preview'] },
+  agenda:     { title: '📅 Agenda', features: ['Sessions grouped by day/time','Topic tags and room info','Green "slides available" indicator','Checked-in sessions highlighted','Links to full session detail'] },
+  session:    { title: '🎤 Session detail', features: ['One-tap check-in earns +1 ticket','Full description and speaker bio','Download slides/PDFs directly','Session topic for interest matching'] },
+  attendees:  { title: '👥 Attendee directory', features: ['Search by name, company, or role','Filter to see Visiativ team only','Profile completion required to appear','287 attendees at the event'] },
+  profile:    { title: '👤 Attendee profile', features: ['Public interests shown (with 🙋 for leads)','Connect / Message / Request meeting','LinkedIn link integration','Connection status shown clearly'] },
+  networking: { title: '🤝 Networking hub', features: ['Smart suggestions based on shared interests','Match score shown (3 shared interests = strong)','Accept/decline connection requests','Meeting request management'] },
+  chat:       { title: '💬 Real-time chat', features: ['Message any attendee directly','Unread badge shows new messages','Conversation list sorted by latest','Real-time delivery via Supabase'] },
+  prizes:     { title: '🎟️ Prize draw', features: ['Live ticket balance in large display','Your leaderboard ranking','Full breakdown of how to earn more','Leaderboard shows top 10 attendees'] },
+  interests:  { title: '❤️ Interest flags', features: ['"Want more info" creates a sales lead','Interests shown on your public profile','Used to generate networking matches','Pre-event visibility to other attendees'] },
+  admin:      { title: '⚙️ Admin dashboard', features: ['Live adoption rate progress bar','8 engagement metrics at a glance','67 sales leads ready to export','One-click CSV export for CRM'] },
+  survey:     { title: '⭐ Event survey', features: ['5-star satisfaction rating','Open text: highlights & improvements','Follow-up opt-in with topic notes','Earns +3 raffle tickets on completion'] },
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'))
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'))
+  document.getElementById('s-' + id)?.classList.add('active')
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    if (b.textContent.toLowerCase().includes(id) || b.getAttribute('onclick')?.includes("'" + id + "'")) {
+      b.classList.add('active')
+    }
+  })
+  // Update info panel
+  const p = panels[id]
+  if (p) {
+    document.getElementById('panel-content').innerHTML = `
+      <h3>${p.title}</h3>
+      ${p.features.map(f => `<div class="info-feature"><div class="info-dot">✓</div><div class="info-text">${f}</div></div>`).join('')}
+    `
+  }
+}
+showScreen('login')
+</script>
+</body>
+</html>
