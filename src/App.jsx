@@ -28,6 +28,7 @@ import Analytics         from './pages/admin/Analytics'
 import LeadsExport       from './pages/admin/LeadsExport'
 import ManageEvent       from './pages/admin/ManageEvent'
 import ManageTopics      from './pages/admin/ManageTopics'
+import ManageAdmins      from './pages/admin/ManageAdmins'
 
 function ProtectedRoute({ children, adminOnly = false }) {
   const { user, attendee, loading, isAdmin } = useAuth()
@@ -76,6 +77,7 @@ function AppRoutes() {
         <Route path="leads"    element={<LeadsExport />} />
         <Route path="event"    element={<ManageEvent />} />
         <Route path="topics"   element={<ManageTopics />} />
+        <Route path="admins"   element={<ManageAdmins />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
