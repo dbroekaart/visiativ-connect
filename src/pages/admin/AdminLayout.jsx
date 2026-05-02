@@ -1,5 +1,5 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Upload, Calendar, BarChart2, Download, Settings, Tag, ArrowLeft } from 'lucide-react'
+import { LayoutDashboard, Upload, Calendar, BarChart2, Download, Settings, Tag, ShieldCheck, ArrowLeft } from 'lucide-react'
 
 const navItems = [
   { to: '/admin',           icon: LayoutDashboard, label: 'Dashboard', end: true },
@@ -8,6 +8,7 @@ const navItems = [
   { to: '/admin/analytics', icon: BarChart2,       label: 'Analytics'  },
   { to: '/admin/leads',     icon: Download,        label: 'Leads'      },
   { to: '/admin/topics',    icon: Tag,             label: 'Topics'     },
+  { to: '/admin/admins',    icon: ShieldCheck,     label: 'Admins'     },
   { to: '/admin/event',     icon: Settings,        label: 'Event'      },
 ]
 
