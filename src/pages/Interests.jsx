@@ -31,7 +31,14 @@ export default function Interests() {
         withTimeout(supabase.from('topics').select('*').order('sort_order')),
         withTimeout(supabase.from('attendee_interests').select('*').eq('attendee_id', attendee.id)),
       ])
-      setTopics(topicsRes.data || [])
+      // Deduplicate by name in case topics were seeded more than once
+      const seen = new Set()
+      const unique = (topicsRes.data || []).filter(t => {
+        if (seen.has(t.name)) return false
+        seen.add(t.name)
+        return true
+      })
+      setTopics(unique)
       const map = {}
       interestsRes.data?.forEach(i => { map[i.topic_id] = i })
       setMyInterests(map)
