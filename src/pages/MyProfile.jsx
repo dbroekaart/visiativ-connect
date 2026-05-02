@@ -1,17 +1,20 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import Layout from '../components/Layout'
 import Avatar from '../components/Avatar'
 import { Link, useNavigate } from 'react-router-dom'
-import { LogOut, ChevronRight, Ticket, Heart, Star, Settings, Pencil } from 'lucide-react'
+import { LogOut, ChevronRight, Ticket, Heart, Star, Settings, Pencil, Camera } from 'lucide-react'
 
 export default function MyProfile() {
   const { attendee, loading: authLoading, refreshAttendee, signOut, isAdmin } = useAuth()
-  const navigate  = useNavigate()
-  const [editing, setEditing] = useState(false)
-  const [saving, setSaving]   = useState(false)
-  const [form, setForm]       = useState({
+  const navigate    = useNavigate()
+  const fileInputRef = useRef(null)
+
+  const [editing, setEditing]     = useState(false)
+  const [saving, setSaving]       = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const [form, setForm]           = useState({
     name:         attendee?.name || '',
     job_title:    attendee?.job_title || '',
     bio:          attendee?.bio || '',
@@ -32,6 +35,48 @@ export default function MyProfile() {
     await refreshAttendee()
     setSaving(false)
     setEditing(false)
+  }
+
+  function handlePhotoClick() {
+    fileInputRef.current?.click()
+  }
+
+  async function handlePhotoChange(e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (!file.type.startsWith('image/')) return
+
+    setUploading(true)
+
+    const reader = new FileReader()
+    reader.onload = async (ev) => {
+      const img = new window.Image()
+      img.onload = async () => {
+        // Center-crop and resize to 200×200
+        const SIZE = 200
+        const canvas = document.createElement('canvas')
+        canvas.width  = SIZE
+        canvas.height = SIZE
+        const ctx = canvas.getContext('2d')
+        const minDim = Math.min(img.width, img.height)
+        const sx = (img.width  - minDim) / 2
+        const sy = (img.height - minDim) / 2
+        ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, SIZE, SIZE)
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.82)
+
+        await supabase
+          .from('attendees')
+          .update({ photo_url: dataUrl })
+          .eq('id', attendee.id)
+
+        await refreshAttendee()
+        setUploading(false)
+      }
+      img.src = ev.target.result
+    }
+    reader.readAsDataURL(file)
+    // reset so the same file can be picked again
+    e.target.value = ''
   }
 
   async function handleSignOut() {
@@ -60,11 +105,20 @@ export default function MyProfile() {
     <Layout title="My Profile">
       <div className="p-4 space-y-3">
 
-        {/* Profile hero card */}
-        <div className="bg-white rounded-3xl shadow-card overflow-hidden">
-          {/* Gradient banner */}
+        {/* Hidden file input */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handlePhotoChange}
+        />
+
+        {/* Profile hero card — no overflow-hidden so avatar ring isn't clipped */}
+        <div className="bg-white rounded-3xl shadow-card">
+          {/* Gradient banner — overflow-hidden only here for the rounded top */}
           <div
-            className="h-20 relative"
+            className="h-20 relative rounded-t-3xl overflow-hidden"
             style={{ background: 'linear-gradient(135deg, #4F46E5 0%, #818CF8 100%)' }}
           >
             {!editing && (
@@ -81,10 +135,30 @@ export default function MyProfile() {
           </div>
 
           <div className="px-5 pb-5">
-            {/* Avatar positioned over banner */}
-            <div className="flex items-end justify-between -mt-8 mb-3">
-              <div className="ring-4 ring-white rounded-2xl">
-                <Avatar name={attendee.name} photoUrl={attendee.photo_url} size="xl" />
+            {/* Avatar — overlapping the banner, with photo-upload button */}
+            <div className="flex items-end justify-between -mt-10 mb-3">
+              <div className="relative">
+                {/* White ring around the circular avatar */}
+                <div className="ring-4 ring-white rounded-full shadow-md">
+                  <Avatar
+                    name={attendee.name}
+                    photoUrl={uploading ? null : attendee.photo_url}
+                    size="xl"
+                  />
+                </div>
+
+                {/* Camera upload button */}
+                <button
+                  onClick={handlePhotoClick}
+                  disabled={uploading}
+                  className="absolute bottom-0 right-0 w-7 h-7 bg-brand-600 hover:bg-brand-700 rounded-full flex items-center justify-center shadow-md border-2 border-white transition-colors disabled:opacity-60"
+                  title="Change photo"
+                >
+                  {uploading
+                    ? <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    : <Camera size={12} className="text-white" />
+                  }
+                </button>
               </div>
             </div>
 
@@ -120,7 +194,7 @@ export default function MyProfile() {
                   onChange={e => update('bio', e.target.value)}
                 />
                 <input
-                  className="input-field"
+                  className="input-filed"
                   placeholder="LinkedIn URL"
                   value={form.linkedin_url}
                   onChange={e => update('linkedin_url', e.target.value)}
