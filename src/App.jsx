@@ -29,6 +29,7 @@ import LeadsExport       from './pages/admin/LeadsExport'
 import ManageEvent       from './pages/admin/ManageEvent'
 import ManageTopics      from './pages/admin/ManageTopics'
 import ManageAdmins      from './pages/admin/ManageAdmins'
+import ResetData         from './pages/admin/ResetData'
 
 function ProtectedRoute({ children, adminOnly = false }) {
   const { user, attendee, loading, isAdmin } = useAuth()
@@ -36,7 +37,6 @@ function ProtectedRoute({ children, adminOnly = false }) {
   if (loading) return <div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-brand-600" /></div>
   if (!user) return <Navigate to="/login" replace />
   if (adminOnly && !isAdmin) return <Navigate to="/" replace />
-  // Redirect to profile setup if profile not yet complete
   if (attendee && !attendee.profile_complete && location.pathname !== '/setup') {
     return <Navigate to="/setup" replace />
   }
@@ -52,7 +52,6 @@ function AppRoutes() {
       <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
       <Route path="/setup" element={<ProtectedRoute><ProfileSetup /></ProtectedRoute>} />
 
-      {/* Main app */}
       <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
       <Route path="/agenda" element={<ProtectedRoute><Agenda /></ProtectedRoute>} />
       <Route path="/agenda/:id" element={<ProtectedRoute><SessionDetail /></ProtectedRoute>} />
@@ -68,16 +67,16 @@ function AppRoutes() {
       <Route path="/venue"  element={<ProtectedRoute><Venue /></ProtectedRoute>} />
       <Route path="/social" element={<ProtectedRoute><Social /></ProtectedRoute>} />
 
-      {/* Admin */}
       <Route path="/admin" element={<ProtectedRoute adminOnly><AdminLayout /></ProtectedRoute>}>
         <Route index element={<AdminDashboard />} />
-        <Route path="upload"   element={<UploadAttendees />} />
-        <Route path="agenda"   element={<ManageAgenda />} />
+        <Route path="upload"    element={<UploadAttendees />} />
+        <Route path="agenda"    element={<ManageAgenda />} />
         <Route path="analytics" element={<Analytics />} />
-        <Route path="leads"    element={<LeadsExport />} />
-        <Route path="event"    element={<ManageEvent />} />
-        <Route path="topics"   element={<ManageTopics />} />
-        <Route path="admins"   element={<ManageAdmins />} />
+        <Route path="leads"     element={<LeadsExport />} />
+        <Route path="event"     element={<ManageEvent />} />
+        <Route path="topics"    element={<ManageTopics />} />
+        <Route path="admins"    element={<ManageAdmins />} />
+        <Route path="reset"     element={<ResetData />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
