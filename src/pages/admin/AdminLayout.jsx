@@ -1,5 +1,5 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Upload, Calendar, BarChart2, Download, Settings, Tag, ShieldCheck, ArrowLeft } from 'lucide-react'
+import { LayoutDashboard, Upload, Calendar, BarChart2, Download, Settings, Tag, ShieldCheck, ArrowLeft, Trash2 } from 'lucide-react'
 
 const navItems = [
   { to: '/admin',           icon: LayoutDashboard, label: 'Dashboard', end: true },
@@ -10,6 +10,7 @@ const navItems = [
   { to: '/admin/topics',    icon: Tag,             label: 'Topics'     },
   { to: '/admin/admins',    icon: ShieldCheck,     label: 'Admins'     },
   { to: '/admin/event',     icon: Settings,        label: 'Event'      },
+  { to: '/admin/reset',     icon: Trash2,          label: 'Reset',  danger: true },
 ]
 
 export default function AdminLayout() {
@@ -28,16 +29,20 @@ export default function AdminLayout() {
       {/* Side nav (desktop) / horizontal nav (mobile) */}
       <div className="flex flex-col md:flex-row min-h-[calc(100vh-52px)]">
         <nav className="bg-white border-b md:border-b-0 md:border-r border-gray-200 md:w-48 flex md:flex-col overflow-x-auto md:overflow-visible">
-          {navItems.map(({ to, icon: Icon, label, end }) => (
+          {navItems.map(({ to, icon: Icon, label, end, danger }) => (
             <NavLink
               key={to}
               to={to}
               end={end}
               className={({ isActive }) =>
                 `flex items-center gap-2.5 px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors ${
-                  isActive
-                    ? 'text-brand-700 bg-brand-50 md:border-r-2 md:border-brand-600'
-                    : 'text-gray-600 hover:bg-gray-50'
+                  danger
+                    ? isActive
+                      ? 'text-red-700 bg-red-50 md:border-r-2 md:border-red-500'
+                      : 'text-red-500 hover:bg-red-50'
+                    : isActive
+                      ? 'text-brand-700 bg-brand-50 md:border-r-2 md:border-brand-600'
+                      : 'text-gray-600 hover:bg-gray-50'
                 }`
               }
             >
