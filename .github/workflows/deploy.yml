@@ -18,15 +18,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build
         run: npm run build
         env:
           VITE_SUPABASE_URL: https://nqeyjyodfqgqocynrfam.supabase.co
           VITE_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5xZXlqeW9kZnFncW9jeW5yZmFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1MTc1ODYsImV4cCI6MjA5MjA5MzU4Nn0.1i-2Q2ZqpScbph3flfRn-4ez64LmBwX-uz_1jpN289w
+          VITE_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.VITE_SUPABASE_SERVICE_ROLE_KEY }}
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
